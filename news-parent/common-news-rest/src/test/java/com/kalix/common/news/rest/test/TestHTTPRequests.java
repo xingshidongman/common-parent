@@ -25,7 +25,7 @@ public class TestHTTPRequests extends APITest {
     private String token;
     private String access_token;
     //insert entity id return by tag
-    private static long id;
+    private static long id;  //when insert succeed, it will be set new id
     //insert delete update status
     private boolean succeed;
 
@@ -57,7 +57,10 @@ public class TestHTTPRequests extends APITest {
     public void test001_POST() {
         String uri = getValue("post.uri");
         String payload = loadFile("add.json");
-        APIResponse response = APIRequest.POST(uri).header("access_token", access_token).type(MediaType.APPLICATION_JSON_TYPE).body(payload)
+        APIResponse response = APIRequest.POST(uri)
+                .header("Cookie", "JSESSIONID=" + token)
+                .header("access_token", access_token)
+                .type(MediaType.APPLICATION_JSON_TYPE).body(payload)
                 .invoke().assertStatus(200);
         String returnString = response.getBody(String.class);
         JSONObject jsonObject = new JSONObject(returnString);
@@ -104,7 +107,10 @@ public class TestHTTPRequests extends APITest {
         String uri = String.format(getValue("put.uri"), id);
         //format data
         String payload = String.format(loadFile("update.json"), id);
-        APIResponse response = APIRequest.PUT(uri).header("access_token", access_token).type(MediaType.APPLICATION_JSON_TYPE).body(payload)
+        APIResponse response = APIRequest.PUT(uri)
+                .header("Cookie", "JSESSIONID=" + token)
+                .header("access_token", access_token)
+                .type(MediaType.APPLICATION_JSON_TYPE).body(payload)
                 .invoke().assertStatus(200);
         String returnString = response.getBody(String.class);
         JSONObject jsonObject = new JSONObject(returnString);
@@ -119,7 +125,9 @@ public class TestHTTPRequests extends APITest {
     @Test
     public void test005_DELETE() {
         String uri = String.format(getValue("delete.uri"), id);
-        APIResponse response = APIRequest.DELETE(uri).header("access_token", access_token)
+        APIResponse response = APIRequest.DELETE(uri)
+                .header("Cookie", "JSESSIONID=" + token)
+                .header("access_token", access_token)
                 .invoke().assertStatus(200);
         String returnString = response.getBody(String.class);
         JSONObject jsonObject = new JSONObject(returnString);
