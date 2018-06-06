@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Starter Blueprint Camel Definition quartz
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+    <camelContext trace="false" xmlns="http://camel.apache.org/schema/blueprint">
+        <route id="clusteredRoute">
+            <!--<from uri="direct:route"/>-->
+            <from uri="quartz2://clustergroup/clusterTimerName?job.name=demoQuartzCluster&amp;cron=0/5+*+*+*+*+?"/>
+            <!--<log message="Hello World!"/>-->
+            <to uri="bean:myBean"/>
+        </route>
+    </camelContext>
+    <bean class="com.kalix.common.message.biz.Testing" id="myBean"/>
+</blueprint>
